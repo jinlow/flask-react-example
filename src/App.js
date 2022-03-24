@@ -46,18 +46,31 @@ export default class App extends React.Component {
       });
   }
 
+  sendData(body) {
+    return fetch("/add", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({user: body})
+    })
+      .then(response => response.json())
+      .catch(error => console.log(error))
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <Form>
             <Form.Label>Enter Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter a name" />
+            <Form.Control type="text" placeholder="Enter a name" onSubmit={() => this.sendData()} />
             <Form.Text classname="text-muted">
               Enter the name of a user to select.
             </Form.Text>
           </Form>
-          <ProfileLoader profileName={this.state.profileName} aboutMe={this.state.aboutMe} randInt={this.state.randInt} dataLoader={() => this.getData()}>Press Here</ProfileLoader>
+          <ProfileLoader profileName={this.state.profileName} aboutMe={this.state.aboutMe} randInt={this.state.randInt} dataLoader={(e) => this.getData(e)}>Press Here</ProfileLoader>
+          <button onClick={() => this.sendData("what")}></button>
         </header>
       </div>
     );
