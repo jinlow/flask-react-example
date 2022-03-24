@@ -29,6 +29,7 @@ export default class App extends React.Component {
       profileName: null,
       aboutMe: null,
       randInt: null,
+      user: null,
     };
   }
 
@@ -46,31 +47,39 @@ export default class App extends React.Component {
       });
   }
 
-  sendData(body) {
+  async sendData() {
     return fetch("/add", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({user: body})
+      body: JSON.stringify({user: this.state.user})
     })
       .then(response => response.json())
       .catch(error => console.log(error))
+  }
+
+  updateUser(e) {
+    this.setState((
+      {
+        user: e.target.value
+      }
+    ));
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <Form>
+          <Form onSubmit={() => this.sendData()}>
             <Form.Label>Enter Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter a name" onSubmit={() => this.sendData()} />
+            <Form.Control type="text" placeholder="Enter a name" onChange={(e) => this.updateUser(e)}/>
             <Form.Text classname="text-muted">
               Enter the name of a user to select.
             </Form.Text>
+            <div><Button type="submit">Add User</Button></div>
           </Form>
           <ProfileLoader profileName={this.state.profileName} aboutMe={this.state.aboutMe} randInt={this.state.randInt} dataLoader={(e) => this.getData(e)}>Press Here</ProfileLoader>
-          <button onClick={() => this.sendData("what")}></button>
         </header>
       </div>
     );

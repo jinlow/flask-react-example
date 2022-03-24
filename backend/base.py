@@ -4,6 +4,7 @@ import random
 
 api = Flask(__name__)
 
+data = []
 
 @api.route("/profile")
 def my_profile():
@@ -17,6 +18,14 @@ def my_profile():
 
 @api.route("/add", methods=["POST"])
 def add_user():
-    user = request.json["user"]
+    res = request.json
+    print(res)
+    user_ = res["user"]
+    if user_ is None:
+        user = ""
+    else:
+        data.append(user_)
+        user = user_
     print(user)
+    print(data)
     return user
